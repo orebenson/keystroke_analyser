@@ -1,15 +1,13 @@
-# Keystroke Authentication
+# Keystroke Analyzing
 ### Ore Benson
 
-Full-stack keystroke authentication website.
+Full-stack keystroke analysis website.
 
-This is a research website, designed to collect and analyse keystroke data using various machine learning algorithms.
+This is an (in progress) extension of my keystroke authentication website, designed for a better user experience, including typing analysis feedback.
 
-Full research and report shown in Documentation.pdf.
 
 ## Technologies
 * Python > 3.11.1
-* Matplotlib > 3.7.1
 * Skikit-learn > 1.2.2
 * Scipy > 1.10.1
 
