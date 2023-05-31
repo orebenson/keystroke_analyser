@@ -1,4 +1,4 @@
-# Keystroke Analyzing
+# Keystroke Analysing
 ### Ore Benson
 
 Full-stack keystroke analysis website.
