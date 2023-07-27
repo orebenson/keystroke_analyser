@@ -6,7 +6,7 @@ from datetime import datetime
 
 from . import schemas, models
 from .database import SessionLocal, engine
-from .matching import get_match
+# from .matching import get_match
 
 models.BaseModel.metadata.create_all(bind=engine)
 
@@ -22,7 +22,7 @@ app = FastAPI()
 
 app.add_middleware(
 	CORSMiddleware,
-	allow_origins=['https://users.sussex.ac.uk', '139.184.223.130'],
+	allow_origins=['http://localhost:3000'],
 	allow_methods=['POST'],
 	allow_headers=['*']
 )
@@ -38,7 +38,7 @@ async def sample(request: schemas.Request, session: Session = Depends(get_db)) -
 	username = request.username
 	password = request.password
 	keytimes = request.keytimes
-	train = request.train
+	keytype = request.keytype
 
 	user = session.query(models.User).filter(models.User.username == username).first()
 
@@ -48,7 +48,7 @@ async def sample(request: schemas.Request, session: Session = Depends(get_db)) -
 			message='Username and password did not match'
 		)
 
-	if train:
+	if keytype == 'train':
 		if not user:
 			user = models.User(username=username, password=password)
 			session.add(user)
@@ -70,20 +70,25 @@ async def sample(request: schemas.Request, session: Session = Depends(get_db)) -
 				status='bad',
 				message='User does not exist'
 			)
+		
+		return schemas.Response(
+				status='good',
+				message='[matching output placeholder]'
+			)
 
 		# RUN MATCHING ALGORITHM
-		match = get_match(keytimes, user)
+		# match = get_match(keytimes, user)
 
-		if match:
-			return schemas.Response(
-				status='good',
-				message='Input matched'
-			)
-		else:
-			return schemas.Response(
-				status='bad',
-				message='Input did not match'
-			)
+		# if match:
+		# 	return schemas.Response(
+		# 		status='good',
+		# 		message='Input matched'
+		# 	)
+		# else:
+		# 	return schemas.Response(
+		# 		status='bad',
+		# 		message='Input did not match'
+		# 	)
 
 	return schemas.Response(
 		status='bad',

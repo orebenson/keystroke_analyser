@@ -5,7 +5,7 @@ class Request(BaseModel):
 	username: str
 	password: str
 	keytimes: List[float]
-	train: bool
+	keytype: str
 
 class Response(BaseModel):
 	status: str

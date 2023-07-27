@@ -24,3 +24,8 @@ This is an (in progress) extension of my keystroke authentication website, desig
 > deactivate
 > uvicorn app.main:app --reload
 ```
+
+### Start frontend
+```
+> npm start
+```
