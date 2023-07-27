@@ -3,7 +3,8 @@
 
 Full-stack keystroke analysis website.
 
-This is an (in progress) extension of my keystroke authentication website, designed for a better user experience, including typing analysis feedback.
+This is an extension of my keystroke authentication reserach website, geared towards user experience instead of research.
+It includes algorithms testing and data analysis feedback
 
 
 ## Technologies
