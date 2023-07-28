@@ -93,7 +93,10 @@ function MainForm() {
                 console.error('Error:', error);
             })
 
-        const json = await response.json() // contains status and message (and analytics if test data sent)
+        const json = await response.json()
+        .catch((error) => {
+            console.error('Error:', error);
+        }) // contains status and message (and analytics if test data sent)
 
         resetInput()
 
