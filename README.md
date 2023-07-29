@@ -42,4 +42,4 @@ Backend can be trained on existing database named 'app.db'
 > npm start
 ```
 
-![front_page](./assets/keystrokes.png)
+![front_page](https://github.com/orebenson/keystroke_analyser/tree/main/assets/keystrokes.PNG?raw=true)
