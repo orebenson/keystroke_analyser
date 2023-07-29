@@ -10,7 +10,7 @@ function App() {
     <div className="App">
 
       <header>
-        <h1>Keystroke Authoriser</h1>
+        <h1>Keystroke Analyser</h1>
         <PalettePicker />
       </header>
       <div className='main-container'>
