@@ -27,8 +27,9 @@ app.add_middleware(
 	allow_headers=['*']
 )
 
-# initialise new matcher
-Matcher = Matcher()
+prompt = "the quick brown fox jumps over the lazy dog" # make sure prompt matches the prompt in the frontend
+# initialise new matcher with prompt length
+Matcher = Matcher(len(prompt))
 # train on existing database
 # database must contain at least 2 different users, each with at least 10 samples for this to work ¯\_(ツ)_/¯
 print('INFO:	initializing classifiers on the database...')

@@ -11,8 +11,8 @@ import time
 
 class Matcher:
 
-    def __init__(self) -> None:
-        df_columns = ['userid'] + ['key_{}'.format(i) for i in range(43)]
+    def __init__(self, prompt_length) -> None:
+        df_columns = ['userid'] + ['key_{}'.format(i) for i in range(prompt_length)]
         self.df = pd.DataFrame(columns=df_columns)
         self.scaler = StandardScaler()
         self.classifiers = {}
