@@ -10,6 +10,7 @@ function MainForm() {
     const [input, setInput] = useState('')
     const [feedback, setFeedback] = useState('')
     const [feedbackStatus, setFeedbackStatus] = useState('')
+    const [loading, setLoading] = useState(false)
     const [inputStatus, setInputStatus] = useState('')
     const [formData, setFormData] = useState({
         username: '',
@@ -99,15 +100,16 @@ function MainForm() {
         }) // contains status and message (and analytics if test data sent)
 
         resetInput()
-
         setFeedback(json.message)
         if (json.status === 'good') {
             setFeedbackStatus('correct')
         } else if (json.status === 'bad') {
             setFeedbackStatus('error')
         }
-    }
+        setLoading(false)
 
+    }
+    
     // function for submnitting data to request function
     const handleSubmit = () => {
         // calculate keytimes
@@ -122,10 +124,11 @@ function MainForm() {
         setCount((count) => count + 1)
         setReadOnly(false)
     }
-
+    
     useEffect(() => {
         // submit form once sentence is complete
         if (input.length === prompt.length) {
+            setLoading(true)
             setReadOnly(true)
             setInputStatus('correct')
             handleSubmit()
@@ -239,8 +242,8 @@ function MainForm() {
                     type="text"
                     id="feedback"
                     className={feedbackStatus}
-                    value={feedback}
-                    placeholder='Results go here...'
+                    value={loading ? 'loading...' : feedback}
+                    placeholder='results go here...'
                     disabled
                 />
 

@@ -14,6 +14,7 @@ function App() {
 
       <main>
         <p>This is the description of the keystroke app</p>
+        <p>Enter 10 or more training samples before using a classifier</p>
 
         <MainForm />
       </main>

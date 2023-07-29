@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Roboto');
 
 * {
-	outline: 1px solid red;
+	/* outline: 1px solid red; */
 	box-sizing: border-box;
 }
 

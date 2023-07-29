@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from datetime import datetime
+import bcrypt
 
 from . import schemas, models
 from .database import SessionLocal, engine
@@ -27,37 +28,48 @@ app.add_middleware(
 )
 
 # initialise new matcher
-
 Matcher = Matcher()
-Matcher.addDataFromDB('app.db')
+# train on existing database
+# database must contain at least 2 different users, each with at least 10 samples for this to work ¯\_(ツ)_/¯
+print('INFO:	initializing classifiers on the database...')
+db_upload_status = Matcher.addDataFromDB('app.db')
+print(f'{db_upload_status["status"]}:	{db_upload_status["message"]}')
 
 @app.get('/')
 async def hello():
-	return {"message": "Hello World"}
+	print('GET')
+	return {"status": "SUCCESS", "message": "hello World"}
 
 @app.post('/sample/')
 async def sample(request: schemas.Request, session: Session = Depends(get_db)) -> schemas.Response:
-	print('user: ' + request.username + ' keytype: ' + request.keytype)
+	print('POST:    user: ' + request.username + ', keytype: ' + request.keytype)
 
 	username = request.username
-	password = request.password
+	password = request.password.encode('utf-8')
 	keytimes = request.keytimes
 	keytype = request.keytype
 
-	user = session.query(models.User).filter(models.User.username == username).first()
+	hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
 
-	if user and password != user.password:
-		return schemas.Response(
-			status='bad',
-			message='Username and password did not match'
-		)
+	user = session.query(models.User).filter(models.User.username == username).first()
+	fresh_user_flag = False
+	if user:
+		pass_match = bcrypt.checkpw(password, user.password)
+		if not pass_match:
+			return schemas.Response(
+				status='bad',
+				message='username and password did not match'
+			)
 
 	if keytype == 'train':
+		message = ''
 		if not user:
-			user = models.User(username=username, password=password)
+			user = models.User(username=username, password=hashed_password)
 			session.add(user)
 			session.commit()
 			session.refresh(user)
+			message += 'new user created, '
+			fresh_user_flag = True
 
 		sample = models.Sample(user_id=user.id, timestamp=datetime.now(), keytimes=keytimes)
 		session.add(sample)
@@ -66,47 +78,54 @@ async def sample(request: schemas.Request, session: Session = Depends(get_db)) -
 		# add new data to the matcher class
 		global Matcher
 		data_status = Matcher.addSample(user.id, keytimes)
-		print(data_status)
-		# retrain classifiers with new data
-		training_status = Matcher.trainClassifiers()
-		print(training_status)
+		print(f'{data_status["status"]}:    {data_status["message"]}')
+		# retrain classifiers with new data if the user already existed
+		if not fresh_user_flag:
+			training_status = Matcher.trainClassifiers()
+			print(f'{training_status["status"]}:    {training_status["message"]}')
+		message += 'training data submitted'
 
 		return schemas.Response(
 			status='good',
-			message='Training data submitted'
+			message=message
 		)
 		
 	else:
 		if not user:
+			user = models.User(username=username, password=hashed_password)
+			session.add(user)
+			session.commit()
+			session.refresh(user)
 			return schemas.Response(
-				status='bad',
-				message='User does not exist'
+				status='good',
+				message='new user created, not enough samples'
 			)
 		
-		return schemas.Response(
-				status='good',
-				message='[matching output placeholder]'
+		# run matching algorithm. if less than 10 samples, algorhtm will return 'error: not enough samples'
+		match = Matcher.getMatch(user.id, keytimes, keytype)
+		print(f'{match["status"]}:    {match["message"]}')
+
+		# if enough samples, algorithm will return 'accepted'/'not accepted' and data to be dislplayed to user
+		if match["status"] == 'ERROR':
+			return schemas.Response(
+				status='bad',
+				message=f'{match["message"]}'
 			)
-
-		# RUN MATCHING ALGORITHM
-		# user must have more than 5 samples in the database, 'if not, return not enough samples'
-
-		# match = get_match(user.id, keytimes, keytype)
-
-		# if match:
-		# 	return schemas.Response(
-		# 		status='good',
-		# 		message='Input matched'
-		# 	)
-		# else:
-		# 	return schemas.Response(
-		# 		status='bad',
-		# 		message='Input did not match'
-		# 	)
+		if match['status'] == 'ACCEPTED':
+			return schemas.Response(
+				status='good',
+				message=f'{match["message"]}'
+			)
+		if match['status'] == 'REJECTED':
+			return schemas.Response(
+				status='bad',
+				message=f'{match["message"]}'
+			)
+			
 
 	return schemas.Response(
 		status='bad',
-		message='You werent supposed to see this'
+		message='you werent supposed to see this'
 	)
 
 
