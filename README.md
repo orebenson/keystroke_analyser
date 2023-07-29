@@ -30,3 +30,5 @@ It includes algorithms testing and data analysis feedback
 ```
 > npm start
 ```
+
+![Alt text](./assets/keystrokes.png)
