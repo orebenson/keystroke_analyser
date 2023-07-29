@@ -4,15 +4,18 @@
 Full-stack keystroke analysis website.
 
 This is an extension of my keystroke authentication reserach website, geared towards user experience instead of research.
-It includes algorithms testing and data analysis feedback
+It includes algorithms testing and data analysis feedback.
 
-backend can be trained on existing database named 'app.db' - must have 2 or more users each with 10 or more entries to be valid
-database must have a 'sample' table of the format:
+Backend can be trained on existing database named 'app.db'
+* Database must have 2 or more users each with 10 or more entries to be valid.
+* Database must have a 'sample' table of the format:
+```
     userid || sample
     0      || [0, keytime_1, keytime_2, ... keytime_n] 
     1      || [0, keytime_1, keytime_2, ... keytime_n] 
     ...    || ... 
-'prompt' variable in backend main.py and frontend MainForm.js must be the same in order for this to work
+```
+* The 'prompt' variable in backend main.py and frontend MainForm.js must be the same in order for this to work
 
 
 ## Technologies
@@ -24,7 +27,7 @@ database must have a 'sample' table of the format:
 ```
 > pip install -r requirements.txt
 ```
-# Activate VE and start server
+### Activate VE and start server
 ```
 > python -m venv .venv
 > .\.venv\Scripts\activate
