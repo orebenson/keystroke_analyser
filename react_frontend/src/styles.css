@@ -22,15 +22,47 @@ body {
 	font-family: 'Roboto', Verdana, sans-serif;
 }
 
-h1, h2, p {
-	padding-bottom: 0.5rem;
+.experiment {
+	padding-top: 1rem;
+	padding-bottom: 1rem;
+}
+
+h1,h2,p,ul,ol{
 	margin: 0;
+	padding: 0;
+}
+
+h1 {
+	display: flex;
+	flex-direction: row;
+	justify-content:center;
+	padding-bottom: 1rem;
+}
+
+h2 {
+	padding-bottom: 0.5rem;
+}
+
+p,ol,ol li {
+	padding-bottom: 0.25rem;
+}
+
+ol {
+	/* list-style-position: inside; */
+	padding-left: 1.08rem;
+}
+
+.main-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
 }
 
 main {
 	padding: 2rem;
 	display: flex;
 	flex-direction: column;
+	max-width: 1000px;
 }
 
 header {

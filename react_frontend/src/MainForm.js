@@ -243,7 +243,7 @@ function MainForm() {
                     id="feedback"
                     className={feedbackStatus}
                     value={loading ? 'loading...' : feedback}
-                    placeholder='results go here...'
+                    placeholder='results...'
                     disabled
                 />
 
