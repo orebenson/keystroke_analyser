@@ -7,12 +7,48 @@
 
 
 :root {
-	--background-highlight: hsl(180, 50%, 90%);
+	/* Cool Blue */
+	/* --background-highlight: hsl(180, 50%, 90%);
 	--color-highlight: hsl(180, 50%, 30%);
+	--bakcground-color: hsl(0, 0%, 100%);
+	--text-color: hsl(0, 0%, 0%); */
+	
+	/* Ocean Breeze */
+	/* --background-highlight: hsl(200, 60%, 80%);
+	--color-highlight: hsl(200, 60%, 20%);
+	--background-color: hsl(220, 40%, 90%);
+	--text-color: hsl(220, 40%, 20%); */
+
+	/* Warm Autumn */
+	--background-highlight: hsl(30, 70%, 85%);
+	--color-highlight: hsl(30, 70%, 20%);
+	--background-color: hsl(10, 40%, 95%);
+	--text-color: hsl(10, 40%, 20%);
+
+	/* Midnight Purple */
+	/* --background-highlight: hsl(270, 30%, 10%);
+	--color-highlight: hsl(270, 30%, 60%);
+	--background-color: hsl(270, 30%, 5%);
+	--text-color: hsl(270, 30%, 90%); */
+  
+	/* Deep Forest */
+	/* --background-highlight: hsl(120, 20%, 10%);
+	--color-highlight: hsl(120, 20%, 80%);
+	--background-color: hsl(120, 20%, 5%);
+	--text-color: hsl(120, 20%, 80%); */
+  
+	/* Charcoal and Orange */
+	/* --background-highlight: hsl(30, 20%, 10%);
+	--color-highlight: hsl(30, 20%, 90%);
+	--background-color: hsl(30, 20%, 5%);
+	--text-color: hsl(30, 20%, 90%); */
+
 }
+
 
 body {
     margin: 0;
+	
 }
 
 .App {
@@ -20,6 +56,9 @@ body {
 	display: grid;
     grid-template-rows: auto 1fr auto;
 	font-family: 'Roboto', Verdana, sans-serif;
+	background-color: var(--background-color);
+	color: var(--text-color);
+	
 }
 
 .experiment {
@@ -104,6 +143,7 @@ footer {
 	text-align: center;
 }
 
+
 #input[readonly] {
 	background: var(--background-highlight);
 }
@@ -133,6 +173,7 @@ input {
 	transition: 0.25s outline, 0.25s border;
 	resize: none;
 	user-select: none;
+	/* background: var(--background-highlight); */
 }
 
 input::placeholder {
