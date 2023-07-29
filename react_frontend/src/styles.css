@@ -5,96 +5,160 @@
 	box-sizing: border-box;
 }
 
-
+/* Define color palettes in the :root */
 :root {
 	/* Cool Blue */
-	/* --background-highlight: hsl(180, 50%, 90%);
+	--background-highlight: hsl(180, 50%, 90%);
 	--color-highlight: hsl(180, 50%, 30%);
-	--bakcground-color: hsl(0, 0%, 100%);
-	--text-color: hsl(0, 0%, 0%); */
-	
+	--background-color: hsl(0, 0%, 100%);
+	--text-color: hsl(0, 0%, 0%);
+}
+
+:root[data-color-palette="cool-blue"] {
+	/* Cool Blue */
+	--background-highlight: hsl(180, 50%, 90%);
+	--color-highlight: hsl(180, 50%, 30%);
+	--background-color: hsl(0, 0%, 100%);
+	--text-color: hsl(0, 0%, 0%);
+}
+
+:root[data-color-palette="ocean-breeze"] {
 	/* Ocean Breeze */
-	/* --background-highlight: hsl(200, 60%, 80%);
+	--background-highlight: hsl(200, 60%, 80%);
 	--color-highlight: hsl(200, 60%, 20%);
 	--background-color: hsl(220, 40%, 90%);
-	--text-color: hsl(220, 40%, 20%); */
+	--text-color: hsl(220, 40%, 20%);
+}
 
+:root[data-color-palette="warm-autumn"] {
 	/* Warm Autumn */
 	--background-highlight: hsl(30, 70%, 85%);
 	--color-highlight: hsl(30, 70%, 20%);
 	--background-color: hsl(10, 40%, 95%);
 	--text-color: hsl(10, 40%, 20%);
+}
 
+:root[data-color-palette="midnight-purple"] {
 	/* Midnight Purple */
-	/* --background-highlight: hsl(270, 30%, 10%);
+	--background-highlight: hsl(270, 30%, 10%);
 	--color-highlight: hsl(270, 30%, 60%);
 	--background-color: hsl(270, 30%, 5%);
-	--text-color: hsl(270, 30%, 90%); */
-  
+	--text-color: hsl(270, 30%, 80%);
+}
+
+:root[data-color-palette="deep-forest"] {
 	/* Deep Forest */
-	/* --background-highlight: hsl(120, 20%, 10%);
+	--background-highlight: hsl(120, 20%, 10%);
 	--color-highlight: hsl(120, 20%, 80%);
 	--background-color: hsl(120, 20%, 5%);
-	--text-color: hsl(120, 20%, 80%); */
-  
-	/* Charcoal and Orange */
-	/* --background-highlight: hsl(30, 20%, 10%);
+	--text-color: hsl(120, 20%, 80%);
+}
+
+:root[data-color-palette="charcoal-orange"] {
+	/* Charcoal Orange*/
+	--background-highlight: hsl(30, 20%, 10%);
 	--color-highlight: hsl(30, 20%, 90%);
 	--background-color: hsl(30, 20%, 5%);
-	--text-color: hsl(30, 20%, 90%); */
+	--text-color: hsl(30, 20%, 90%);
+}
 
+:root[data-color-palette="violet-contrast"] {
+    /* Violet Contrast */
+    --background-highlight: hsl(280, 70%, 85%);
+    --color-highlight: hsl(280, 70%, 20%);
+    --background-color: hsl(100, 70%, 95%);
+    --text-color: hsl(100, 70%, 20%);
+}
+
+:root[data-color-palette="mystic-orchid"] {
+    /* Mystic Orchid */
+    --background-highlight: hsl(300, 40%, 10%);
+    --color-highlight: hsl(300, 40%, 70%);
+    --background-color: hsl(300, 40%, 5%);
+    --text-color: hsl(300, 40%, 70%);
+}
+
+:root[data-color-palette="cool-aqua"] {
+    /* Cool Aqua */
+    --background-highlight: hsl(180, 50%, 15%);
+    --color-highlight: hsl(180, 50%, 80%);
+    --background-color: hsl(180, 50%, 10%);
+    --text-color: hsl(180, 50%, 80%);
+}
+
+:root[data-color-palette="golden-sunset"] {
+    /* Golden Sunset */
+    --background-highlight: hsl(40, 70%, 15%);
+    --color-highlight: hsl(40, 70%, 60%);
+    --background-color: hsl(40, 70%, 10%);
+    --text-color: hsl(40, 70%, 60%);
+}
+
+:root[data-color-palette="stormy-sea"] {
+    /* Stormy Sea */
+    --background-highlight: hsl(210, 30%, 15%);
+    --color-highlight: hsl(210, 30%, 80%);
+    --background-color: hsl(210, 30%, 10%);
+    --text-color: hsl(210, 30%, 80%);
 }
 
 
 body {
-    margin: 0;
-	
+	margin: 0;
 }
 
+/* App container styles */
 .App {
 	min-height: 100vh;
 	display: grid;
-    grid-template-rows: auto 1fr auto;
+	grid-template-rows: auto 1fr auto;
 	font-family: 'Roboto', Verdana, sans-serif;
 	background-color: var(--background-color);
 	color: var(--text-color);
-	
 }
 
+/* Common styles for elements */
 .experiment {
-	padding-top: 1rem;
-	padding-bottom: 1rem;
+	padding: 1rem 0;
 }
 
-h1,h2,p,ul,ol{
+h1,
+h2,
+p,
+ul,
+ol {
 	margin: 0;
 	padding: 0;
-}
-
-h1 {
-	display: flex;
-	flex-direction: row;
-	justify-content:center;
-	padding-bottom: 1rem;
 }
 
 h2 {
 	padding-bottom: 0.5rem;
 }
 
-p,ol,ol li {
+p,
+ol {
 	padding-bottom: 0.25rem;
 }
 
 ol {
-	/* list-style-position: inside; */
 	padding-left: 1.08rem;
+}
+
+a {
+	color: var(--color-highlight);
 }
 
 .main-container {
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
+}
+
+.main-container h1 {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	padding-bottom: 1rem;
 }
 
 main {
@@ -104,29 +168,42 @@ main {
 	max-width: 1000px;
 }
 
-header {
+header,
+footer {
 	display: flex;
-	justify-content: center;
+	justify-content: space-between;
 	padding: 1rem;
 	background: var(--background-highlight);
 	color: var(--color-highlight);
 }
 
-footer {
-	display: flex;
-	justify-content: center;
-	padding: 3rem;
+/* Palette selector styles */
+select {
+	font: inherit;
+	border: none;
+	outline: none;
 	background: var(--background-highlight);
-	color: var(--color-highlight);
+	color: var(--text-color);
+	padding: 0.5rem;
+	user-select: none;
+	border-radius: 0.5rem; 
 }
 
+select option {
+	font: inherit;
+	background: var(--background-highlight);
+	color: var(--text-color);
+}
+
+/* Form styles */
 .mainForm form {
 	display: flex;
 	flex-direction: column;
 	gap: 0.5rem;
 }
 
-#prompt {
+#prompt,
+#feedback {
 	color: var(--color-highlight);
 	padding: 0.5rem;
 	font-family: 'Roboto Mono', monospace;
@@ -135,17 +212,11 @@ footer {
 }
 
 #feedback {
-	color: var(--color-highlight);
-	padding: 0.5rem;
-	font-family: 'Roboto Mono', monospace;
-	border-color: transparent;
-	background: none;
 	text-align: center;
 }
 
-
 #input[readonly] {
-	background: var(--background-highlight);
+	background: var(--background-color);
 }
 
 form ul label {
@@ -158,7 +229,6 @@ form ul {
 	padding: 1rem;
 	border-radius: 0.5rem;
 	padding-left: 2rem;
-
 	background: var(--background-highlight);
 }
 
@@ -169,11 +239,12 @@ input {
 	border-radius: 0.5rem;
 	border: 0.1rem solid var(--background-highlight);
 	outline: 0 solid var(--background-highlight);
+	background: var(--background-highlight);
+	color: var(--text-color);
 	padding: 0.5rem;
 	transition: 0.25s outline, 0.25s border;
 	resize: none;
 	user-select: none;
-	/* background: var(--background-highlight); */
 }
 
 input::placeholder {
@@ -185,11 +256,13 @@ input:focus {
 	outline: 0.2rem solid var(--background-highlight);
 }
 
+/* Submission type elector styles */
 .types {
 	display: flex;
 	align-items: center;
 	gap: 1rem;
 	font-family: 'Roboto Mono', monospace;
+	padding: 0.5rem;
 }
 
 .types label {
@@ -231,18 +304,18 @@ input:focus {
 	color: var(--color-highlight);
 }
 
-a {
-	color: var(--color-highlight);
-}
 
-.error, #input.incorrect, #feedback.error {
+/* Feedback and input status styles */
+.error,
+#input.incorrect,
+#feedback.error {
 	background: hsl(0, 50%, 90%);
 	color: hsl(0, 50%, 30%);
 }
 
-.correct, #input.correct, #feedback.correct {
+.correct,
+#input.correct,
+#feedback.correct {
 	background: hsl(90, 50%, 90%);
 	color: hsl(90, 50%, 30%);
 }
-
-

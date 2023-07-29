@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import './styles.css';
+import '../styles.css';
 
 function MainForm() {
     const prompt = "the quick brown fox jumps over the lazy dog"
@@ -77,39 +77,38 @@ function MainForm() {
     // function for sending data to the server and status retrieval
     const sendRequest = async (data, keytimes) => {
 
-        const URL = "http://localhost:8000/sample/"
-        const response = await fetch(URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                username: data.username,
-                password: data.password,
-                keytimes: keytimes,
-                keytype: data.type,
-            }),
-        })
-            .catch((error) => {
-                console.error('Error:', error);
+        try {
+            const URL = "http://localhost:8000/sample/"
+            const response = await fetch(URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: data.username,
+                    password: data.password,
+                    keytimes: keytimes,
+                    keytype: data.type,
+                }),
             })
-
-        const json = await response.json()
-        .catch((error) => {
-            console.error('Error:', error);
-        }) // contains status and message (and analytics if test data sent)
-
-        resetInput()
-        setFeedback(json.message)
-        if (json.status === 'good') {
-            setFeedbackStatus('correct')
-        } else if (json.status === 'bad') {
+            // contains status and message (and analytics if test data sent)
+            const json = await response.json()
+            resetInput()
+            setFeedback(json.message)
+            if (json.status === 'good') {
+                setFeedbackStatus('correct')
+            } else if (json.status === 'bad') {
+                setFeedbackStatus('error')
+            }
+        } catch (error) {
+            setFeedback('error, check console')
             setFeedbackStatus('error')
+            console.error('Error:', error);
         }
-        setLoading(false)
 
+        setLoading(false)
     }
-    
+
     // function for submnitting data to request function
     const handleSubmit = () => {
         // calculate keytimes
@@ -124,7 +123,7 @@ function MainForm() {
         setCount((count) => count + 1)
         setReadOnly(false)
     }
-    
+
     useEffect(() => {
         // submit form once sentence is complete
         if (input.length === prompt.length) {
@@ -179,6 +178,7 @@ function MainForm() {
                     value={input}
                     onClick={inputAlerter}
                     onKeyDown={handleKeystrokes}
+                    onBlur={resetInput}
                     required
                     readOnly={readOnly}
                 />
