@@ -208,7 +208,7 @@ function MainForm() {
                             type="radio"
                             id="testMLP"
                             name="type"
-                            value="testMLP"
+                            value="MLPclf"
                             onChange={handleInputChange}
                         />
                         Multi-layer Perceptron
@@ -219,7 +219,7 @@ function MainForm() {
                             type="radio"
                             id="testSVC"
                             name="type"
-                            value="testSVC"
+                            value="SVMclf"
                             onChange={handleInputChange}
                         />
                         Support Vector
@@ -230,7 +230,7 @@ function MainForm() {
                             type="radio"
                             id="testKNN"
                             name="type"
-                            value="testKNN"
+                            value="KNNclf"
                             onChange={handleInputChange}
                         />
                         K-Nearest Neighbours

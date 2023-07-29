@@ -3,10 +3,10 @@ import sqlite3 as sql
 from sklearn.neural_network import MLPClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, RandomizedSearchCV
 from sklearn.preprocessing import StandardScaler
 from sklearn.utils.fixes import loguniform
-from sklearn.model_selection import RandomizedSearchCV
+from sklearn.metrics import accuracy_score
 import time
 
 class Matcher:
@@ -16,6 +16,7 @@ class Matcher:
         self.df = pd.DataFrame(columns=df_columns)
         self.scaler = StandardScaler()
         self.classifiers = {}
+        self.accuracies = {}
         self.createClassifiers()
 
 
@@ -40,8 +41,8 @@ class Matcher:
     
     def createClassifiers(self):
         
-        MLPclf = MLPClassifier(hidden_layer_sizes=(150,100,50), max_iter=300, random_state=1)
-        KNNclf = KNeighborsClassifier(n_neighbors=7)
+        MLPclf = MLPClassifier(hidden_layer_sizes=(100,100,100), max_iter=500, random_state=1)
+        KNNclf = KNeighborsClassifier(n_neighbors=11)
         # Optimizing SVC classifier
         param_grid = {"C": loguniform(1e3, 1e5), "gamma": loguniform(1e-4, 1e-1),}
         SVMclf = RandomizedSearchCV(SVC(kernel="rbf", class_weight="balanced"), param_grid, n_iter=10)
@@ -49,18 +50,26 @@ class Matcher:
         self.classifiers = {'MLPclf':MLPclf, 'SVMclf':SVMclf, 'KNNclf':KNNclf}
         
 
-    def addSample(self, userid, keytimes): # -> create DataFrame of userid, key_0, key_1...
+    def addSample(self, userid, keytimes): # -> format data and add to dataFrame
         
-        # Create initial dictionary
+        # format data
+        df = self.formatData(userid, keytimes)
+        # Add data to dataframe
+        self.df = pd.concat([self.df, df], ignore_index=True)
+        
+        return {'status':'SUCCESS', 'message':'data submitted to matcher'}
+    
+    
+    def formatData(self, userid, keytimes): # -> create DataFrame of userid, key_0, key_1...
+
+        # Create initial dictionary 
         data_dict = {'userid': [userid]}
         for i, key in enumerate(keytimes):
             data_dict['key_{}'.format(i)] = key
         # Create the DataFrame from the dictionary
         df = pd.DataFrame(data_dict)
-        # Add data to dataframe
-        self.df = pd.concat([self.df, df], ignore_index=True)
         
-        return {'status':'SUCCESS', 'message':'data submitted to matcher'}
+        return df
 
 
     def scaleData(self, dataframe): # -> scale data in dataFrame
@@ -104,22 +113,40 @@ class Matcher:
         # train each classifier
         for classifer in self.classifiers:
             self.classifiers[classifer].fit(train_x, train_y)
+            # set accuracy for each classifier
+            self.accuracies[classifer] = self.get_accuracy(self.classifiers[classifer], test_x, test_y)
+
 
         end_time = time.time()
         elapsed_time = end_time - start_time
 
         return {'status':'SUCCESS', 'message':f'trained all classifiers in {elapsed_time} seconds'}
 
+    def get_accuracy(self, clf, test_x, test_y): # -> return prediction accuracy score for a classifier
+
+        y_pred = clf.predict(test_x)
+        acc = accuracy_score(test_y, y_pred)
+
+        return acc
 
     def getMatch(self, userid, keytimes, keytype): # -> return status: error/accepted/rejected, analytics data: graph? heatmap?
         
         if self.df.__len__() < 10: 
             return {'status':'ERROR', 'message':'not enough data'}
         
-        # run chosen classifier on userid and keytimes, return accuracy? 
+        formatted_data = self.formatData(userid, keytimes)
+        scaled_data = self.scaleData(formatted_data)
+        input_x = scaled_data.loc[:, scaled_data.columns != 'userid']
+        # run chosen classifier on keytimes, predicting the userid
+        prediction = self.classifiers[keytype].predict(input_x)[0]
+        accuracy = round(self.accuracies[keytype], 4)*100
+        if prediction != userid:
+            return {'status':'REJECTED', 'message':f'unauthorized with {accuracy}% accuracy'}
+        else:
+            return {'status':'ACCEPTED', 'message':f'authorized with {accuracy}% accuracy'}
         
-        return {'status':'ACCEPTED', 'message':'authorized'}
+        return {'status':'ERROR', 'message':'prediction failed'} 
 
-    # def get_performance(self, classifier, test_x, test_y, ...):
+    # def get_heatmap()?
 
 
