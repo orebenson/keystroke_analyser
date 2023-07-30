@@ -3,7 +3,7 @@
 
 Full-stack keystroke analysis website.
 
-This is an extension of my keystroke authentication reserach website, geared towards user experience instead of research.
+This is an extension of my keystroke authentication reserach website, geared towards user experience.
 It includes algorithms testing and data analysis feedback.
 
 Backend can be trained on existing database named 'app.db'
