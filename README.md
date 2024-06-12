@@ -1,5 +1,4 @@
 # Keystroke Analysis
-### Ore Benson
 
 Welcome to my Keystroke Analysis Application. This research application is designed to collect and analyze keystroke data using various machine learning algorithms. It extends my original keystroke authentication research website to enhance user experience, including algorithm testing and data analysis feedback.
 
