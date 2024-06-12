@@ -1,10 +1,11 @@
-# Keystroke Analysing
+# Keystroke Analysis
 ### Ore Benson
 
-Welcome to my Full-Stack Keystroke Analysis Application. This research platform is designed to collect and analyze keystroke data using various machine learning algorithms. It extends my original keystroke authentication research website to enhance user experience, including algorithm testing and data analysis feedback.
+Welcome to my Keystroke Analysis Application. This research application is designed to collect and analyze keystroke data using various machine learning algorithms. It extends my original keystroke authentication research website to enhance user experience, including algorithm testing and data analysis feedback.
 
 ### Research summary: 
 - Collected and analyzed over 30,000 keystrokes, implementing machine learning algorithms for user classification and authentication, with accuracies exceeding 85%.
+- Contact me for more detailed results report.
 
 ## Setup
 ### Backend
