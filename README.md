@@ -1,5 +1,9 @@
 # Keystroke Analysis
 
+![FastAPI](https://img.shields.io/badge/fastapi-109989?style=for-the-badge&logo=FASTAPI&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+
 Welcome to my Keystroke Analysis Application. This research application is designed to collect and analyze keystroke data using various machine learning algorithms. It extends my original keystroke authentication research website to enhance user experience, including algorithm testing and data analysis feedback.
 
 ### Research summary: 
