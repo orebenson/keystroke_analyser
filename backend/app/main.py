@@ -28,10 +28,9 @@ app.add_middleware(
 )
 
 prompt = "the quick brown fox jumps over the lazy dog" # make sure prompt matches the prompt in the frontend
-# initialise new matcher with prompt length
+
 Matcher = Matcher(len(prompt))
-# train on existing database
-# database must contain at least 2 different users, each with at least 10 samples for this to work ¯\_(ツ)_/¯
+# train on existing database - must contain at least 2 different users, each with at least 10 samples for this to work ¯\_(ツ)_/¯
 print('INFO:	initializing classifiers on the database...')
 db_upload_status = Matcher.addDataFromDB('app.db')
 print(f'{db_upload_status["status"]}:	{db_upload_status["message"]}')
@@ -76,11 +75,10 @@ async def sample(request: schemas.Request, session: Session = Depends(get_db)) -
 		session.add(sample)
 		session.commit()
 
-		# add new data to the matcher class
 		global Matcher
 		data_status = Matcher.addSample(user.id, keytimes)
 		print(f'{data_status["status"]}:    {data_status["message"]}')
-		# retrain classifiers with new data if the user already existed
+  
 		if not fresh_user_flag:
 			training_status = Matcher.trainClassifiers()
 			print(f'{training_status["status"]}:    {training_status["message"]}')
@@ -102,11 +100,9 @@ async def sample(request: schemas.Request, session: Session = Depends(get_db)) -
 				message='new user created, not enough samples'
 			)
 		
-		# run matching algorithm. if less than 10 samples, algorhtm will return 'error: not enough samples'
 		match = Matcher.getMatch(user.id, keytimes, keytype)
 		print(f'{match["status"]}:    {match["message"]}')
 
-		# if enough samples, algorithm will return 'accepted'/'not accepted' and data to be dislplayed to user
 		if match["status"] == 'ERROR':
 			return schemas.Response(
 				status='bad',

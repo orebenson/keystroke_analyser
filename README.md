@@ -9,6 +9,7 @@ Welcome to my Keystroke Analysis Application. This research application is desig
 ## Setup
 ### Backend
 #### Activate VE and start server
+- ensure frontend URL is set in CORS config
 ```
 > python -m venv .venv
 > .\.venv\Scripts\activate
@@ -28,13 +29,15 @@ Backend can be trained on existing database named 'app.db'
 * The 'prompt' variable in backend main.py and frontend MainForm.js must be the same in order for this to work
 
 ### Frontend
+- ensure backend URL is set
 ```
+> npm install
 > npm start
 ```
 
 ![front_page](/assets/keystrokes.PNG)
 
 ## Technologies
-* Python > 3.11.1
-* Skikit-learn > 1.2.2
-* Scipy > 1.10.1
+* Python
+* Skikit-learn
+* Scipy

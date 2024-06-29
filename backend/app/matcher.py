@@ -20,9 +20,8 @@ class Matcher:
         self.createClassifiers()
 
 
-    def addDataFromDB(self, database_name='app.db'): # -> load preixisting database to Matcher
+    def addDataFromDB(self, database_name='app.db'):
         
-        # if database doesnt exist -> return {'status':'ERROR', 'message':'database not found'}
         dbConnection = sql.connect(database_name)
         db = dbConnection.cursor()
 
@@ -43,36 +42,36 @@ class Matcher:
         
         MLPclf = MLPClassifier(hidden_layer_sizes=(100,100,100), max_iter=500, random_state=1)
         KNNclf = KNeighborsClassifier(n_neighbors=11)
-        # Optimizing SVC classifier
-        param_grid = {"C": loguniform(1e3, 1e5), "gamma": loguniform(1e-4, 1e-1),}
+        
+        param_grid = {"C": loguniform(1e3, 1e5), "gamma": loguniform(1e-4, 1e-1),} # Optimizing SVC classifier
         SVMclf = RandomizedSearchCV(SVC(kernel="rbf", class_weight="balanced"), param_grid, n_iter=10)
-        # Create dictionary of classifiers
+        
         self.classifiers = {'MLPclf':MLPclf, 'SVMclf':SVMclf, 'KNNclf':KNNclf}
         
 
-    def addSample(self, userid, keytimes): # -> format data and add to dataFrame
+    def addSample(self, userid, keytimes):
         
-        # format data
+    
         df = self.formatData(userid, keytimes)
-        # Add data to dataframe
+        
         self.df = pd.concat([self.df, df], ignore_index=True)
         
         return {'status':'SUCCESS', 'message':'data submitted to matcher'}
     
     
-    def formatData(self, userid, keytimes): # -> create DataFrame of userid, key_0, key_1...
+    def formatData(self, userid, keytimes):
 
-        # Create initial dictionary 
+        
         data_dict = {'userid': [userid]}
         for i, key in enumerate(keytimes):
             data_dict['key_{}'.format(i)] = key
-        # Create the DataFrame from the dictionary
+            
         df = pd.DataFrame(data_dict)
         
         return df
 
 
-    def scaleData(self, dataframe): # -> scale data in dataFrame
+    def scaleData(self, dataframe): 
        
         scaled_df = dataframe
         scaled_df.loc[:, scaled_df.columns != 'userid'] = self.scaler.fit_transform(scaled_df.loc[:, scaled_df.columns != 'userid'])
@@ -80,7 +79,7 @@ class Matcher:
         return scaled_df
     
 
-    def splitData(self, dataframe): # -> create new train/test split of data
+    def splitData(self, dataframe):
 
         # filter out userids with less than 5 occurrences
         userid_counts = dataframe['userid'].value_counts()
@@ -88,7 +87,6 @@ class Matcher:
         filtered_dataframe = dataframe[dataframe['userid'].isin(valid_userids)]
         labels = filtered_dataframe['userid'].tolist()
 
-        # create train-test split on the filtered data
         train_set, test_set = train_test_split(filtered_dataframe, test_size=0.25, stratify=labels)
         train_x = train_set.loc[:, train_set.columns != 'userid']
         train_y = train_set['userid'].tolist()
@@ -98,7 +96,7 @@ class Matcher:
         return (train_x, train_y, test_x, test_y)
     
 
-    def trainClassifiers(self): # -> retrain classifiers, scaling, and creating new train/test split and fitting each to it
+    def trainClassifiers(self):
         
         if self.df.__len__() < 10: 
             return {'status':'ERROR', 'message':'not enough data for classifiers'}
@@ -106,14 +104,12 @@ class Matcher:
             return {'status':'ERROR', 'message':'not enough users for classifiers'}
         start_time = time.time()
 
-        # scale data for classifiers
         scaled_data = self.scaleData(self.df)
-        # create train/test split for classifiers
+        
         train_x, train_y, test_x, test_y = self.splitData(scaled_data)
-        # train each classifier
+        
         for classifer in self.classifiers:
             self.classifiers[classifer].fit(train_x, train_y)
-            # set accuracy for each classifier
             self.accuracies[classifer] = self.get_accuracy(self.classifiers[classifer], test_x, test_y)
 
 
@@ -122,14 +118,14 @@ class Matcher:
 
         return {'status':'SUCCESS', 'message':f'trained all classifiers in {elapsed_time} seconds'}
 
-    def get_accuracy(self, clf, test_x, test_y): # -> return prediction accuracy score for a classifier
+    def get_accuracy(self, clf, test_x, test_y):
 
         y_pred = clf.predict(test_x)
         acc = accuracy_score(test_y, y_pred)
 
         return acc
 
-    def getMatch(self, userid, keytimes, keytype): # -> return status: error/accepted/rejected, analytics data: graph? heatmap?
+    def getMatch(self, userid, keytimes, keytype):
         
         if self.df.__len__() < 10: 
             return {'status':'ERROR', 'message':'not enough data'}
@@ -137,16 +133,11 @@ class Matcher:
         formatted_data = self.formatData(userid, keytimes)
         scaled_data = self.scaleData(formatted_data)
         input_x = scaled_data.loc[:, scaled_data.columns != 'userid']
-        # run chosen classifier on keytimes, predicting the userid
         prediction = self.classifiers[keytype].predict(input_x)[0]
         accuracy = round(self.accuracies[keytype], 4)*100
         if prediction != userid:
             return {'status':'REJECTED', 'message':f'unauthorized with {accuracy}% accuracy'}
         else:
             return {'status':'ACCEPTED', 'message':f'authorized with {accuracy}% accuracy'}
-        
-        return {'status':'ERROR', 'message':'prediction failed'} 
-
-    # def get_heatmap()?
 
 

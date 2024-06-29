@@ -18,7 +18,6 @@ function MainForm() {
         type: '',
     })
 
-    // function to reset input and count if username/password fields changed
     const handleInputChange = (event) => {
         const { name, value } = event.target
         resetInput()
@@ -29,7 +28,6 @@ function MainForm() {
         }))
     }
 
-    //input should be readonly when username or password are empty
     useEffect(() => {
         if (formData.password !== '' && formData.username !== '' && formData.type !== '') {
             setReadOnly(false)
@@ -38,14 +36,12 @@ function MainForm() {
         }
     }, [formData])
 
-    //reset input field when username/password is changed, when input is blurred, and when data is sent to server
     const resetInput = () => {
         setKeylog([])
         setInput('')
         setInputStatus('')
     }
 
-    // function to be run on click of input field, showing alerts
     const inputAlerter = () => {
         if (formData.username === '' || formData.password === '') {
             alert('Username and password cannot be empty.')
@@ -57,11 +53,10 @@ function MainForm() {
         }
     }
 
-    // function to be run on every keypress in input field, recording keystrokes, and only allowing correct inputs
+
     const handleKeystrokes = (event) => {
         const { key, timeStamp } = event
 
-        // check whether character matches prompt
         if (!keysAllowed.has(key)) return
         if (key !== prompt[input.length]) {
             setInputStatus('incorrect')
@@ -69,12 +64,10 @@ function MainForm() {
         } else {
             setInputStatus('correct')
         }
-        // create list of keytimes
         setKeylog((prevKeylog) => [...prevKeylog, timeStamp])
         setInput((prevInput) => prevInput + key)
     }
 
-    // function for sending data to the server and status retrieval
     const sendRequest = async (data, keytimes) => {
 
         try {
@@ -91,7 +84,7 @@ function MainForm() {
                     keytype: data.type,
                 }),
             })
-            // contains status and message (and analytics if test data sent)
+
             const json = await response.json()
             resetInput()
             setFeedback(json.message)
@@ -109,9 +102,7 @@ function MainForm() {
         setLoading(false)
     }
 
-    // function for submnitting data to request function
     const handleSubmit = () => {
-        // calculate keytimes
         const new_keytimes = keylog.map((time, idx) => {
             if (idx === 0) {
                 return 0
@@ -125,7 +116,6 @@ function MainForm() {
     }
 
     useEffect(() => {
-        // submit form once sentence is complete
         if (input.length === prompt.length) {
             setLoading(true)
             setReadOnly(true)
